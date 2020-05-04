@@ -20,7 +20,7 @@ Architecture
 
     0000aaaabbbbtttt  sub rt,ra,rb  regs[t] = regs[a] - regs[b]
     0001aaaabbbbtttt  add rt,ra,rb  regs[t] = regs[a] + regs[b]
-    0001aaaabbbbtttt  mul rt,ra,rb  regs[t] = regs[a] * regs[b]
+    0010aaaabbbbtttt  mul rt,ra,rb  regs[t] = regs[a] * regs[b]
 
     1000iiiiiiiitttt  movl rt,i     regs[t] = sign_extend(i)
     1001iiiiiiiitttt  movh rt,i     regs[t] = (regs[t] & 0xff) | (i << 8)
