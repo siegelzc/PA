@@ -17,14 +17,25 @@ for i in range (0,len(lines)):
 #print(mem)
 
 pc = 0;
-print("type c to continue, q to quit, r to print register, and m to print memory")
+print("\nThe following commands can be used:\n",
+        "\tq to quit\n", 
+        "\tc to continue\n",
+        "\tr to print entire register file\n", 
+        "\tr[start:end] to print a range of registers\n",
+        "\tm to print entire memory file\n",
+        "\tm[start:end] to print a range of memory\n")
 while True:
     
     ui = input()
     while(ui != "c"):
-        if(ui == "q"): sys.exit()
+        if("q" in ui): sys.exit()
         if(ui == "r"): print(regs)
         if(ui == "m"): print(mem)
+        if("[" in ui): 
+            start = int( ui[ ui.find("[")+1 : ui.find(":") ] )
+            end = int( ui[ ui.find(":")+1 : ui.find("]") ] )
+            if("r" in ui): print(regs[start:end])
+            if("m" in ui): print(mem[start:end])
         ui = input()
     print(mem[pc]+mem[pc+1])
 
