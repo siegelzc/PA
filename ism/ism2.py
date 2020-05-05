@@ -17,8 +17,17 @@ for i in range (0,len(lines)):
 #print(mem)
 
 pc = 0;
+print("type c to continue, q to quit, r to print register, and m to print memory")
 while True:
     
+    ui = input()
+    while(ui != "c"):
+        if(ui == "q"): sys.exit()
+        if(ui == "r"): print(regs)
+        if(ui == "m"): print(mem)
+        ui = input()
+    print(mem[pc]+mem[pc+1])
+
     ins = parse(mem[pc]+mem[pc+1])
     value = None;
     
@@ -51,7 +60,7 @@ while True:
         mem[va+1] = '{0:0{1}X}'.format(vt,2)[2:4]
     
     if(value != None):
-        if(ins.rt == 0): print(chr(value), end = '')
+        if(ins.rt == 0): print("printing:", chr(value), end = '')
         else: regs[ins.rt] = '{0:0{1}X}'.format(value,4)
     
     if(typ == Instruction.Type.JZ and va == 0):
@@ -65,3 +74,5 @@ while True:
     else:
         pc+=2;
 
+    #print(regs)
+    
