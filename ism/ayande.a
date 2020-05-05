@@ -1,0 +1,25 @@
+@0
+movl 0 r2
+movl 8 r1
+jns r2 r1
+movl 78 r0
+movl 89 r0
+movh 255 r2
+movl 18 r1
+js r2 r1
+movl 78 r0
+movl 89 r0
+movl 232 r3
+movl 89 r4
+st r4 r3
+ld r3 r0
+movl 92 r6
+movl 3 r5
+sub r6 r5 r0
+movl 42 r1
+movl 144 r7
+movh 133 r7
+st r7 r1
+movl 78 r0
+movl 89 r0
+invalid
