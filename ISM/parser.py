@@ -1,12 +1,8 @@
-#!/usr/bin/python3
-#
 # Parse the program's hex file of instructions into a list of instructions
-import sys
 from enum import Enum
 
 
 def parse(line):
-
     opcode = int(line[0], 16)
     ra = int(line[1], 16)
     rb = int(line[2], 16)
@@ -71,7 +67,6 @@ def parse(line):
         ins = Instruction.Type.UNDEF
         instruction = Instruction(ins)
 
-
     return instruction
 
 
@@ -92,21 +87,21 @@ class Instruction:
         ST = 151
         UNDEF = -1
 
-    def __init__(self, ins, *args):
-        self.ins = ins;
+    def __init__(self, op, *args):
+        self.op = op
 
-        if (ins == Instruction.Type.SUB or ins == Instruction.Type.ADD or ins == Instruction.Type.MUL):
+        if (op == Instruction.Type.SUB or op == Instruction.Type.ADD or op == Instruction.Type.MUL):
             self.ra = args[0]
             self.rb = args[1]
             self.rt = args[2]
-        elif (ins == Instruction.Type.MOVL or ins == Instruction.Type.MOVH):
+        elif (op == Instruction.Type.MOVL or op == Instruction.Type.MOVH):
             self.ra = None
             self.rb = None
             self.imm = args[0]
             self.rt = args[1]
-        elif (ins == Instruction.Type.MOV or ins == Instruction.Type.SWP or ins == Instruction.Type.JZ 
-                or ins == Instruction.Type.JNZ or ins == Instruction.Type.JS or ins == Instruction.Type.JNS 
-                or ins == Instruction.Type.LD or ins == Instruction.Type.ST):
+        elif (op == Instruction.Type.MOV or op == Instruction.Type.SWP or op == Instruction.Type.JZ
+              or op == Instruction.Type.JNZ or op == Instruction.Type.JS or op == Instruction.Type.JNS
+              or op == Instruction.Type.LD or op == Instruction.Type.ST):
             self.ra = args[0]
             self.rb = None
             self.rt = args[1]
