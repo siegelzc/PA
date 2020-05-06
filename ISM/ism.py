@@ -81,3 +81,13 @@ while True:
         pc = vt
     else:
         pc += 2
+    memLog.append(mem)
+    regsLog.append(regs)
+
+with open("ism_mem.csv","w") as f:
+    wr = csv.writer(f,delimiter="\n")
+    wr.writerow(list(zip(*memLog)))
+
+with open("ism_regs.csv","w") as f:
+    wr = csv.writer(f,delimiter="\n")
+    wr.writerow(list(zip(*regsLog)))
