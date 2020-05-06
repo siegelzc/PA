@@ -1,4 +1,3 @@
-@0
 movl 0 r2
 movl 8 r1
 jns r2 r1

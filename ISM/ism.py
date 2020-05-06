@@ -75,9 +75,9 @@ while True:
         pc = vt
     elif (typ == Instruction.Type.JNZ and va != 0):
         pc = vt
-    elif (typ == Instruction.Type.JS and va < 0):
+    elif (typ == Instruction.Type.JS and sval(va) < 0):
         pc = vt
-    elif (typ == Instruction.Type.JNS and va >= 0):
+    elif (typ == Instruction.Type.JNS and sval(va) >= 0):
         pc = vt
     else:
         pc += 2

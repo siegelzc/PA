@@ -2,10 +2,22 @@
 
 import sys
 from parser import *
-from ism import sval
 
 mem = [None] * 65535
 regs = ['0000'] + [None] * 15
+
+
+def sval(num):
+    """Evaluate the 2's complement signed decimal value of a number"""
+    binary = '{0:016b}'.format(num)
+    if binary[0] == '0':
+        return num
+    else:
+        short = binary[1:]
+        neg = '{:0b}'.format(~int(short, 2))[-15:]
+        val = -(int(neg, 2) + 1)
+        return val
+
 
 with open(sys.argv[1], 'r') as hexfile:
     text = hexfile.read()
@@ -84,9 +96,9 @@ while True:
         pc = vt
     elif (typ == Instruction.Type.JNZ and va != 0):
         pc = vt
-    elif (typ == Instruction.Type.JS and va < 0):
+    elif (typ == Instruction.Type.JS and sval(va) < 0):
         pc = vt
-    elif (typ == Instruction.Type.JNS and va >= 0):
+    elif (typ == Instruction.Type.JNS and sval(va) >= 0):
         pc = vt
     else:
         pc += 2
