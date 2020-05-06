@@ -1,3 +1,7 @@
 .idea/
 ISM/__pycache__/
+cpu/cpu.log
+cpu/a.out
+cpu/cpu
+cpu/cpu.vcd
 
