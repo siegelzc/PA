@@ -53,7 +53,7 @@ while True:
         sex = '{0:b}'.format(ins.imm).rjust(16, immb[0])
         value = int(sex, 2)
     elif (typ == Instruction.Type.MOVH):
-        value = ins.imm * 16 ** 2 + vt
+        value = (ins.imm << 8) + vt % 2 ** 8
     elif (typ == Instruction.Type.MOV):
         value = va
     elif (typ == Instruction.Type.SWP):
@@ -69,7 +69,7 @@ while True:
         if (ins.rt == 0):
             print(chr(value), end='')
         else:
-            regs[ins.rt] = '{0:0{1}X}'.format(value, 4)
+            regs[ins.rt] = '{0:0{1}X}'.format(value, 4)[-4:]
 
     if (typ == Instruction.Type.JZ and va == 0):
         pc = vt
