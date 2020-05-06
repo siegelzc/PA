@@ -387,7 +387,7 @@ module main();
 
     reg[15:0]vt;
     reg[15:0]out;
-    reg[3:0]rt_e1;
+    reg[3:0]rt_e;
     reg[15:0] prev_laddr;
 
     assign used_regx = stall_e ? saved_regx : prev_raw_hazard ? forward_regx : regx;
@@ -422,18 +422,18 @@ module main();
 
     assign misaligned = !stall_d && used_regy[0] & (isLd_d| isSt_d) & !stall_e & valid_d & isDefined_d;
 
-    reg isSub_e1;
-    reg isMovl_e1;
-    reg isMovh_e1;
-    reg isJz_e1;
-    reg isJnz_e1;
-    reg isJs_e1;
-    reg isJns_e1;
-    reg isLd_e1;
-    reg isSt_e1;
-    reg isDefined_e1;
-    reg updatesRegs_e1;
-    reg misaligned_e1;
+    reg isSub_e;
+    reg isMovl_e;
+    reg isMovh_e;
+    reg isJz_e;
+    reg isJnz_e;
+    reg isJs_e;
+    reg isJns_e;
+    reg isLd_e;
+    reg isSt_e;
+    reg isDefined_e;
+    reg updatesRegs_e;
+    reg misaligned_e;
     reg prev_misaligned;
     reg prev_prev_misaligned;
 
@@ -467,7 +467,7 @@ module main();
         mis_st_cnt <= next_mis_st_cnt;
         used_regx_e <= used_regx;
         if(valid_d)
-            misaligned_e1 <= used_regy[0] & isLd_d & isDefined_d;
+            misaligned_e <= used_regy[0] & isLd_d & isDefined_d;
             if(!next_stall_e) begin
                 if(isSub_d) begin
                     out <= used_regx - used_regy;
@@ -482,18 +482,18 @@ module main();
                 end
                 
                 pc_e <= pc_d;
-                isSub_e1 <= isSub_d;
-                isMovl_e1 <= isMovl_d;
-                isMovh_e1 <= isMovh_d;
-                isJz_e1 <= isJz_d;
-                isJnz_e1 <= isJnz_d;
-                isJs_e1 <= isJs_d;
-                isJns_e1 <= isJns_d;
-                isLd_e1 <= isLd_d;
-                isSt_e1 <= isSt_d;
-                isDefined_e1 <= isDefined_d;
-                updatesRegs_e1 <= updatesRegs_d;
-                rt_e1 <= rt;
+                isSub_e <= isSub_d;
+                isMovl_e <= isMovl_d;
+                isMovh_e <= isMovh_d;
+                isJz_e <= isJz_d;
+                isJnz_e <= isJnz_d;
+                isJs_e <= isJs_d;
+                isJns_e <= isJns_d;
+                isLd_e <= isLd_d;
+                isSt_e <= isSt_d;
+                isDefined_e <= isDefined_d;
+                updatesRegs_e <= updatesRegs_d;
+                rt_e <= rt;
 
                 pred_pc_e <= pred_pc_d;
                 pred_valid_e <= pred_valid_d;
@@ -519,17 +519,17 @@ module main();
     //---WRITEBACK---
     reg[15:0]pc_w;
     wire mispredict = valid_e && (((pred_pc_e != vt) && pred_taken_e) || !pred_taken_e) && pred_valid_e && !dont_write_back && isJumping;
-    wire mispredict_nj = valid_e && pred_taken_e && pred_valid_e && !dont_write_back && !isJumping && (isJz_e1 || isJnz_e1 || isJs_e1 || isJns_e1);
-    assign updatesRegs_w = updatesRegs_e1 && !stall_e && isDefined_e1 && valid_e && !dont_write_back;
-    assign addt = rt_e1;
+    wire mispredict_nj = valid_e && pred_taken_e && pred_valid_e && !dont_write_back && !isJumping && (isJz_e || isJnz_e || isJs_e || isJns_e);
+    assign updatesRegs_w = updatesRegs_e && !stall_e && isDefined_e && valid_e && !dont_write_back;
+    assign addt = rt_e;
     reg[7:0] reg_copy[0:15];
 
-    wire[15:0] used_out = isMovh_e1 ? {out[15:8],reg_copy[addt]} : out;
-    assign datat = isLd_e1 ? (misaligned_e1 ? {prev_ldata[7:0],ldata[15:8]} : ldata) : used_out;
-    //    assign datat = isLd_e1 ? (misaligned_e1 ? {ldata[7:0],prev_ldata[15:8]} : ldata) : out;
+    wire[15:0] used_out = isMovh_e ? {out[15:8],reg_copy[addt]} : out;
+    assign datat = isLd_e ? (misaligned_e ? {prev_ldata[7:0],ldata[15:8]} : ldata) : used_out;
+    //    assign datat = isLd_e ? (misaligned_e ? {ldata[7:0],prev_ldata[15:8]} : ldata) : out;
 
     // Wrong order
-    assign writeen = isSt_e1 && valid_e && !dont_write_back && !stall_e;
+    assign writeen = isSt_e && valid_e && !dont_write_back && !stall_e;
     assign saddr = saddr_e;
     assign sdata = saddr_e[0] ? {ldata[15:8],used_out[7:0]} : used_out;
     assign flush = ((isJumping && (mispredict || !pred_valid_e)) || mispredict_nj || smc) && valid_e && !flush_wb;
@@ -549,7 +549,7 @@ module main();
                             || ((saddr[15:1] + 1  == pc_e[15:1]) && valid_e))
                          ));
                          
-    assign bp_wen = (pc_e != pc_w) && valid_e && !dont_write_back && (isJz_e1 || isJnz_e1 || isJs_e1 || isJns_e1);
+    assign bp_wen = (pc_e != pc_w) && valid_e && !dont_write_back && (isJz_e || isJnz_e || isJs_e || isJns_e);
     assign bp_write_addr = pc_e;
     assign bp_write_branch = vt;
     assign bp_write_taken = isJumping;
@@ -568,10 +568,10 @@ module main();
         flush_wb <= flush;
         if(updatesRegs_w) begin
             reg_copy[addt] <= datat[7:0];
-            if(rt_e1 == 0)
+            if(rt_e == 0)
                 $write("%c",datat[7:0]);
         end
-        isDefined_w <= isDefined_e1;
+        isDefined_w <= isDefined_e;
         if(flush & isJumping & (mispredict || !pred_valid_e)) begin //Do I need stall/valid checks here
             pc <= vt;
         end
@@ -595,7 +595,7 @@ module main();
             
     //---ADMIN---
     always @(posedge clk) begin
-        if(!stall_e && valid_e) halt <= ! isDefined_e1;
+        if(!stall_e && valid_e) halt <= ! isDefined_e;
         
         
 

@@ -30,14 +30,14 @@ module log();
 
 
     assign clk = main.clk;
-    assign isSub = main.isSub;
-    assign isMovl = main.isMovl;
-    assign isMovh = main.isMovh;
-    assign isJz = main.isJz;
-    assign isJnz = main.isJnz;
-    assign isJs = main.isJs;
-    assign isJns = main.isJns;
-    assign isLd = main.isLd;
+    assign isSub = main.isSub_e;
+    assign isMovl = main.isMovl_e;
+    assign isMovh = main.isMovh_e;
+    assign isJz = main.isJz_e;
+    assign isJnz = main.isJnz_e;
+    assign isJs = main.isJs_e;
+    assign isJns = main.isJns_e;
+    assign isLd = main.isLd_e;
     assign isSt = main.isSt;
     assign jump_taken = main.isJumping;
     assign retired = main.retired;
