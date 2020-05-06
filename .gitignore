@@ -4,4 +4,6 @@ cpu/cpu.log
 cpu/a.out
 cpu/cpu
 cpu/cpu.vcd
+cpu.vcd
+cpu.log
 
