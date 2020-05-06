@@ -59,23 +59,23 @@ module log();
         end
         if(retired) begin
             if(isSub)
-                $fdisplay(logfile, "PC: %04h sub r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h sub r[%h] = %04h",pc,reg_addr,reg_data);
             if(isMovl)
-                $fdisplay(logfile, "PC: %04h movl r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h movl r[%h] = %04h",pc,reg_addr,reg_data);
             if(isMovh)
-                $fdisplay(logfile, "PC: %04h movh r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h movh r[%h] = %04h",pc,reg_addr,reg_data);
             if(isLd)
-                $fdisplay(logfile, "PC: %04h ld r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h ld r[%h] = %04h",pc,reg_addr,reg_data);
             if(isSt)
-                $fdisplay(logfile, "PC: %04h st m[%04h] = %04h",pc,mem_addr,mem_data);
+                $fdisplay(logfile, "%04h st m[%04h] = %04h",pc,mem_addr,mem_data);
             if(isJz)
-                $fdisplay(logfile, "PC: %04h jz pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h jz pc = %04h",pc,jump_addr);
             if(isJnz)
-                $fdisplay(logfile, "PC: %04h jnz pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h jnz pc = %04h",pc,jump_addr);
             if(isJs)
-                $fdisplay(logfile, "PC: %04h js pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h js pc = %04h",pc,jump_addr);
             if(isJns)
-                $fdisplay(logfile, "PC: %04h jns pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h jns pc = %04h",pc,jump_addr);
         end
     end
 
