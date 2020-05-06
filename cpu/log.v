@@ -38,7 +38,7 @@ module log();
     assign isJs = main.isJs_e;
     assign isJns = main.isJns_e;
     assign isLd = main.isLd_e;
-    assign isSt = main.isSt;
+    assign isSt = main.isSt_e;
     assign jump_taken = main.isJumping;
     assign retired = main.retired;
     assign pc = main.pc_e;
