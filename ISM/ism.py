@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
 import sys
+import csv
 from parser import *
 
 mem = [None] * 65535
 regs = ['0000'] + [None] * 15
-
+memLog = []
+regsLog = []
 
 def sval(num):
     """Evaluate the 2's complement signed decimal value of a number"""
@@ -32,6 +34,9 @@ for i in range(0, len(lines)):
 pc = 0
 while True:
 
+    regsLog.append(regs[:])
+    memLog.append(mem[:])
+    
     ins = parse(mem[pc] + mem[pc + 1])
     value = None
 
@@ -81,8 +86,7 @@ while True:
         pc = vt
     else:
         pc += 2
-    memLog.append(mem)
-    regsLog.append(regs)
+    
 
 with open("ism_mem.csv","w") as f:
     wr = csv.writer(f,delimiter="\n")
