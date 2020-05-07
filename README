@@ -28,21 +28,21 @@ Architecture
 
     encoding          instruction   description
 
-    0000aaaabbbbtttt  sub rt,ra,rb  regs[t] = regs[a] - regs[b]
-    0001aaaabbbbtttt  add rt,ra,rb  regs[t] = regs[a] + regs[b]
-    0010aaaabbbbtttt  mul rt,ra,rb  regs[t] = regs[a] * regs[b]
+    0000aaaabbbbtttt  sub ra rb rt  regs[t] = regs[a] - regs[b]
+    0001aaaabbbbtttt  add ra rb rt  regs[t] = regs[a] + regs[b]
+    0010aaaabbbbtttt  mul ra rb rt  regs[t] = regs[a] * regs[b]
 
-    1000iiiiiiiitttt  movl rt,i     regs[t] = sign_extend(i)
-    1001iiiiiiiitttt  movh rt,i     regs[t] = (regs[t] & 0xff) | (i << 8)
+    1000iiiiiiiitttt  movl i rt     regs[t] = sign_extend(i)
+    1001iiiiiiiitttt  movh i rt     regs[t] = (regs[t] & 0xff) | (i << 8)
 
-    1011aaaa0000tttt  mov rt,ra     regs[t] = reg[a]
-    1011aaaa0001tttt  swp rt,ra     regs[t] = reg[a], regs[a] = regs[t]
-    
-    1110aaaa0000tttt  jz rt,ra      pc = (regs[ra] == 0) ? regs[rt] : pc + 2
-    1110aaaa0001tttt  jnz rt,ra     pc = (regs[ra] != 0) ? regs[rt] : pc + 2
-    1110aaaa0010tttt  js rt,ra      pc = (regs[ra] < 0) ? regs[rt] : pc + 2
-    1110aaaa0011tttt  jns rt,ra     pc = (regs[ra] >= 0) ? regs[rt] : pc + 2
+    1011aaaa0000tttt  mov ra rt     regs[t] = reg[a]
+    1011aaaa0001tttt  swp ra rt     regs[t] = reg[a],  regs[a] = regs[t]
 
-    1111aaaa0000tttt  ld rt,ra      regs[t] = mem[regs[a]]
-    1111aaaa0001tttt  st rt,ra      mem[regs[a]] = regs[t]
+    1110aaaa0000tttt  jz ra rt      pc = (regs[ra] == 0) ? regs[rt] : pc + 2
+    1110aaaa0001tttt  jnz ra rt     pc = (regs[ra] != 0) ? regs[rt] : pc + 2
+    1110aaaa0010tttt  js ra rt      pc = (regs[ra] < 0) ? regs[rt] : pc + 2
+    1110aaaa0011tttt  jns ra rt     pc = (regs[ra] >= 0) ? regs[rt] : pc + 2
+
+    1111aaaa0000tttt  ld ra rt      regs[t] = mem[regs[a]]
+    1111aaaa0001tttt  st ra rt      mem[regs[a]] = regs[t]
 
