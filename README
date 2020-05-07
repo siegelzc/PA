@@ -44,5 +44,5 @@ Architecture
     1110aaaa0011tttt  jns ra rt     pc = (regs[ra] >= 0) ? regs[rt] : pc + 2
 
     1111aaaa0000tttt  ld ra rt      regs[t] = mem[regs[a]]
-    1111aaaa0001tttt  st ra rt      mem[regs[a]] = regs[t]
+    1111aaaa0001tttt  st ra rt      mem[regs[t]] = regs[a]
 
