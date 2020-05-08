@@ -103,7 +103,7 @@ def encodeline(line, linenum, list):
         elif shitreg > 15 or shitreg < 0: error_argument_invalid()
 
 
-        i = linenum
+        i = 0
         while i < len(list):
             strippedline = list[i].strip()
             splitline = list[i].split(' ')
