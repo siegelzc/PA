@@ -106,9 +106,9 @@ def encodeline(line, linenum, list):
         i = 0
         while i < len(list):
             strippedline = list[i].strip()
-            splitline = list[i].split(' ')
+            splitline = strippedline.split(' ')
 
-            if (splitline[0] == ".label" and splitline[1].strip() == label):
+            if (splitline[0] == ".label" and splitline[1] == label):
 
                 if ins == 'jz':
                     return '8{0:02x}{1:x}\ne{2:x}0{3:x}\n'.format(2*(i + 1),shitreg,ra, shitreg)

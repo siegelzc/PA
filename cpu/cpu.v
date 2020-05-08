@@ -576,7 +576,7 @@ module main();
     assign bp_write_branch = vt;
     assign bp_write_taken = isJumping;
 
-    wire retired = valid_e && (pc_e != pc_w);
+    wire retired = valid_e && ((pc_e != pc_w) || pc_e == 0);
     wire[15:0] mem_addr = saddr;
     wire[15:0] mem_data = used_regx_e;
     wire[15:0] jump_addr = isJumping ? vt : pc_e + 2;
