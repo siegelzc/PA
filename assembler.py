@@ -87,7 +87,7 @@ def encodeline(line, linenum, list):
         elif ins == 'ld':
             return 'f{0:x}0{1:x}\n'.format(ra, rt)
         elif ins == 'st':
-            return 'f{0:x}1{1:x}\n'.format(ra, rt)
+            return 'f{0:x}1{1:x}\n'.format(rt, ra)
     elif ins == 'jz' or ins == 'jnz' or ins == 'js' or ins == 'jns':
         #jz rx hello r3... .label hello
         try:
