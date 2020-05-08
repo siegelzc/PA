@@ -71,8 +71,8 @@ while True:
         except TypeError:  # TypeError occurs if either of the memory bytes are undefined
             print("WARNING:{0} Loading an undefined value from memory".format(ins.str), file=sys.stderr)
     elif (typ == Instruction.Type.ST):
-        mem[vt] = '{0:0{1}X}'.format(va, 2)[0:2]
-        mem[vt + 1] = '{0:0{1}X}'.format(va, 2)[2:4]
+        mem[va] = '{0:0{1}X}'.format(vt, 2)[0:2]
+        mem[va + 1] = '{0:0{1}X}'.format(vt, 2)[2:4]
 
     if (value is not None):
         if (ins.rt == 0):
