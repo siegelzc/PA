@@ -1,11 +1,12 @@
 movl 0 r2
 jns r2 jump1 r1
 movl 78 r0
+.label jump1
 movl 89 r0
 movh 255 r2
-.label jump1
 js r2 jump2 r1
 movl 78 r0
+.label jump2
 movl 89 r0
 movl 232 r3
 movl 89 r4
@@ -17,7 +18,6 @@ sub r6 r5 r0
 movl 42 r1
 movl 144 r7
 movh 133 r7
-.label jump2
 st r7 r1
 movl 78 r0
 movl 89 r0

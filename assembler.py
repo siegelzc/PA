@@ -111,13 +111,13 @@ def encodeline(line, linenum, list):
             if (splitline[0] == ".label" and splitline[1].strip() == label):
 
                 if ins == 'jz':
-                    return '8{0:02x}{1:x}\ne{2:x}0{3:x}\n'.format(i + 1,shitreg,ra, shitreg)
+                    return '8{0:02x}{1:x}\ne{2:x}0{3:x}\n'.format(2*(i + 1),shitreg,ra, shitreg)
                 elif ins == 'jnz':
-                    return '8{0:02x}{1:x}\ne{2:x}1{3:x}\n'.format(i + 1,shitreg,ra, shitreg)
+                    return '8{0:02x}{1:x}\ne{2:x}1{3:x}\n'.format(2*(i + 1),shitreg,ra, shitreg)
                 elif ins == 'js':
-                    return '8{0:02x}{1:x}\ne{2:x}2{3:x}\n'.format(i + 1,shitreg,ra, shitreg)
+                    return '8{0:02x}{1:x}\ne{2:x}2{3:x}\n'.format(2*(i + 1),shitreg,ra, shitreg)
                 elif ins == 'jns':
-                    return '8{0:02x}{1:x}\ne{2:x}3{3:x}\n'.format(i + 1,shitreg,ra, shitreg)
+                    return '8{0:02x}{1:x}\ne{2:x}3{3:x}\n'.format(2*(i + 1),shitreg,ra, shitreg)
                 break
             i += 1
         
