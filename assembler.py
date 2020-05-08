@@ -69,7 +69,7 @@ def encodeline(line, linenum, list):
             return '8{0:02x}{1:x}\n'.format(i, rt)
         elif ins == 'movh':
             return '9{0:02x}{1:x}\n'.format(i, rt)
-    elif ins == 'mov' or ins == 'swp' or \
+    elif ins == 'mov' or \
             ins == 'ld' or ins == 'st':
         try:
             ra = int(split[1][1:])
@@ -82,8 +82,6 @@ def encodeline(line, linenum, list):
 
         if ins == 'mov':
             return 'b{0:x}0{1:x}\n'.format(ra, rt)
-        elif ins == 'swp':
-            return 'b{0:x}1{1:x}\n'.format(ra, rt)
         elif ins == 'ld':
             return 'f{0:x}0{1:x}\n'.format(ra, rt)
         elif ins == 'st':

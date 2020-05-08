@@ -40,7 +40,6 @@ Architecture
     1001iiiiiiiitttt  movh i rt     regs[t] = (regs[t] & 0xff) | (i << 8)
 
     1011aaaa0000tttt  mov ra rt     regs[t] = reg[a]
-    1011aaaa0001tttt  swp ra rt     regs[t] = reg[a],  regs[a] = regs[t]
 
     1110aaaa0000tttt  jz ra label rt      pc = (regs[ra] == 0) ? regs[rt] : pc + 2
     1110aaaa0001tttt  jnz ra label rt     pc = (regs[ra] != 0) ? regs[rt] : pc + 2

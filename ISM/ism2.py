@@ -77,14 +77,11 @@ while True:
         value = (ins.imm << 8) + vt % 2 ** 8
     elif (typ == Instruction.Type.MOV):
         value = va
-    elif (typ == Instruction.Type.SWP):
-        value = va
-        regs[ins.ra] = regs[ins.rt]
     elif (typ == Instruction.Type.LD):
         value = int(mem[va] + mem[va + 1], 16)
     elif (typ == Instruction.Type.ST):
-        mem[vt] = '{0:0{1}X}'.format(va, 2)[0:2]
-        mem[vt + 1] = '{0:0{1}X}'.format(va, 2)[2:4]
+        mem[va] = '{0:0{1}X}'.format(vt, 2)[0:2]
+        mem[va + 1] = '{0:0{1}X}'.format(vt, 2)[2:4]
 
     if (value != None):
         if (ins.rt == 0):

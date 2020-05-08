@@ -16,7 +16,6 @@ def parse(line):
     isMovl = opcode == 8
     isMovh = opcode == 9
     isMov = opcode == 11 and xop == 0
-    isSwp = opcode == 11 and xop == 1
     isJz = opcode == 14 and xop == 0
     isJnz = opcode == 14 and xop == 1
     isJs = opcode == 14 and xop == 2
@@ -41,9 +40,6 @@ def parse(line):
         instruction = Instruction(ins, imm, rt)
     elif isMov:
         ins = Instruction.Type.MOV
-        instruction = Instruction(ins, ra, rt)
-    elif isSwp:
-        ins = Instruction.Type.SWP
         instruction = Instruction(ins, ra, rt)
     elif isJz:
         ins = Instruction.Type.JZ
@@ -78,7 +74,6 @@ class Instruction:
         MOVL = 8
         MOVH = 9
         MOV = 110
-        SWP = 111
         JZ = 140
         JNZ = 141
         JS = 142
@@ -96,7 +91,6 @@ class Instruction:
         elif (op == Instruction.Type.MOVL): self.str = 'movl'
         elif (op == Instruction.Type.MOVH): self.str = 'movh'
         elif (op == Instruction.Type.MOV): self.str = 'mov'
-        elif (op == Instruction.Type.SWP): self.str = 'swp'
         elif (op == Instruction.Type.JZ): self.str = 'jz'
         elif (op == Instruction.Type.JNZ): self.str = 'jnz'
         elif (op == Instruction.Type.JS): self.str = 'js'
@@ -113,7 +107,7 @@ class Instruction:
             self.rb = None
             self.imm = args[0]
             self.rt = args[1]
-        elif (op == Instruction.Type.MOV or op == Instruction.Type.SWP or op == Instruction.Type.JZ
+        elif (op == Instruction.Type.MOV or op == Instruction.Type.JZ
               or op == Instruction.Type.JNZ or op == Instruction.Type.JS or op == Instruction.Type.JNS
               or op == Instruction.Type.LD or op == Instruction.Type.ST):
             self.ra = args[0]

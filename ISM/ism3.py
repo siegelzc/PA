@@ -27,7 +27,8 @@ with open(sys.argv[1], 'r') as hexfile:
 
 lines = text.split('\n')
 
-f = open("ism.out", "w")
+log = open("ism.log", "w")
+out = open("ism.out", "w")
 
 for i in range(0, len(lines)):
     if (len(lines[i]) == 4):
@@ -65,21 +66,18 @@ while True:
         value = (ins.imm << 8) + vt % 2 ** 8
     elif (typ == Instruction.Type.MOV):
         value = va
-    elif (typ == Instruction.Type.SWP):
-        value = va
-        regs[ins.ra] = regs[ins.rt]
     elif (typ == Instruction.Type.LD):
         try:
             value = int(mem[va] + mem[va + 1], 16)
         except TypeError:  # TypeError occurs if either of the memory bytes are undefined
             print("WARNING:{0} Loading an undefined value from memory".format(ins.str), file=sys.stderr)
     elif (typ == Instruction.Type.ST):
-        mem[vt] = '{0:0{1}X}'.format(va, 2)[0:2]
-        mem[vt + 1] = '{0:0{1}X}'.format(va, 2)[2:4]
+        mem[va] = '{0:0{1}X}'.format(vt, 2)[0:2]
+        mem[va + 1] = '{0:0{1}X}'.format(vt, 2)[2:4]
 
     if (value is not None):
         if (ins.rt == 0):
-           print(end='') # print(chr(value), end='')
+            print(chr(value), end='', file=out)
         else:
             regs[ins.rt] = '{0:0{1}X}'.format(value, 4)[-4:]
 
@@ -93,17 +91,25 @@ while True:
         pc = vt
     else:
         pc += 2
-    
+
     s = ""
-    if(typ == Instruction.Type.ST): s = "m["+'{0:0{1}X}'.format(vt, 4)+"] = " + '{0:0{1}X}'.format(va, 4) 
-    elif(value != None): s = "r[" + '{0:0{1}X}'.format(ins.rt, 4) + "] = " + '{0:0{1}X}'.format(value, 4)
-    else: s = 'pc = {0:0{1}X}'.format(pc, 4)
-    
-    
+    if (typ == Instruction.Type.ST):
+        s = "m[" + '{0:0{1}X}'.format(vt, 4) + "] = " + '{0:0{1}X}'.format(va, 4)
+    elif (value is not None):
+        s = "r[" + '{0:0{1}X}'.format(ins.rt, 4) + "] = " + '{0:0{1}X}'.format(value, 4)
+    else:
+        s = 'pc = {0:0{1}X}'.format(pc, 4)
 
-    output += ( '{0:0{1}X}'.format(pc, 4) + " " + str(typ) + " " + s + "\n")
+    output += ('{0:0{1}X}'.format(pc, 4) + " " + str(typ) + " " + s + "\n")
 
-f.write(output)
-f.close()
+log.write(output)
+log.close()
+out.close()
 
+with open("ism_mem.csv", "w") as log:
+    wr = csv.writer(log, delimiter="\n")
+    wr.writerow(list(zip(*memLog)))
 
+with open("ism_regs.csv", "w") as log:
+    wr = csv.writer(log, delimiter="\n")
+    wr.writerow(list(zip(*regsLog)))
