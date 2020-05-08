@@ -190,6 +190,9 @@ module main();
     reg isJns_d;
     reg isLd_d;
     reg isSt_d;
+    reg isMov_d;
+    reg isAdd_d;
+    reg isMul_d;
     wire isDefined;
     wire updatesRegs;
     reg[7:0] i;
@@ -214,12 +217,15 @@ module main();
     wire isJns = (opcode == 4'he) & (xop == 3);
     wire isLd = (opcode == 4'hf) & (xop == 0);
     wire isSt = (opcode == 4'hf) & (xop == 1);
+    wire isMov = (opcode == 4'hb);
+    wire isAdd = opcode == 1;
+    wire isMul = opcode == 2;
 
 
-    wire a_read_ops = (isSub | isJz | isJnz | isJs | isJns | isLd | isSt);
-    wire b_read_ops = isSub;
+    wire a_read_ops = (isSub | isJz | isJnz | isJs | isJns | isLd | isSt | isAdd | isMul | isMov);
+    wire b_read_ops = isSub | isAdd | isMul;
     wire t_read_ops = isJz | isJnz | isJs | isJns | isSt;
-    wire t_write_ops = isSub | isMovl | isMovh | isLd;
+    wire t_write_ops = isSub | isMovl | isMovh | isLd | isAdd | isMul | isMov;
 
     assign read_ra = used_ins[11:8];
     assign read_rb = used_ins[7:4];
@@ -245,8 +251,8 @@ module main();
 
     wire[3:0]addx;
     wire[3:0]addy;
-    assign addx = isSub ? used_ins[11:8] : used_ins[3:0];
-    assign addy = isSub ? used_ins[7:4] : used_ins[11:8];       
+    assign addx = (isSub | isAdd | isMul) ? used_ins[11:8] : used_ins[3:0];
+    assign addy = (isSub | isAdd | isMul) ? used_ins[7:4] : used_ins[11:8];       
 
     reg[3:0] prev_addx;
     reg[3:0] prev_addy;
@@ -254,8 +260,8 @@ module main();
     reg t_write_ops_d;
     reg[3:0] write_rt_d;
 
-    assign isDefined = ((isSub | isMovl | isMovh | isJz | isJnz | isJs | isJns | isLd | isSt) === 1);
-    assign updatesRegs = ((isSub | isMovl | isMovh | isLd) == 1);
+    assign isDefined = ((isSub | isMovl | isMovh | isJz | isJnz | isJs | isJns | isLd | isSt | isAdd | isMul | isMov) === 1);
+    assign updatesRegs = ((isSub | isMovl | isMovh | isLd | isAdd | isMul | isMov) == 1);
 
     always @(posedge clk) begin
         stall_d <= flush ? 0 : next_stall_d;
@@ -286,6 +292,9 @@ module main();
                 isJns_d <= (opcode == 4'he) & (xop == 3);
                 isLd_d <= (opcode == 4'hf) & (xop == 0);
                 isSt_d <= (opcode == 4'hf) & (xop == 1);
+                isMov_d <= (opcode == 4'hb);
+                isAdd_d <= opcode == 1;
+                isMul_d <= opcode == 2;
 
 
                 i <= used_ins[11:4];
@@ -344,10 +353,10 @@ module main();
 
     //assign addx = isSub ? used_ins[11:8] : used_ins[3:0];
     //assign addy = isSub ? used_ins[7:4] : used_ins[11:8]; 
-    wire[15:0] forward_regx = isSub_d ? (raw_hazard_a_d ? datat : regx) :
+    wire[15:0] forward_regx = (isSub_d | isAdd_d | isMul_d) ? (raw_hazard_a_d ? datat : regx) :
                                     (raw_hazard_t_d ? datat : regy);
 
-    wire[15:0] forward_regy = isSub_d ? (raw_hazard_b_d ? datat : regy) :
+    wire[15:0] forward_regy = (isSub_d | isAdd_d | isMul_d) ? (raw_hazard_b_d ? datat : regy) :
                                     (raw_hazard_a_d ? datat : regy);
 
 
@@ -420,7 +429,7 @@ module main();
     assign used_write_rt = stall_e ? saved_write_rt : write_rt_d;
 
 
-    assign misaligned = !stall_d && used_regy[0] & (isLd_d| isSt_d) & !stall_e & valid_d & isDefined_d;
+    assign misaligned = !stall_d && used_regy[0] & (isLd_d | isSt_d) & !stall_e & valid_d & isDefined_d;
 
     reg isSub_e;
     reg isMovl_e;
@@ -431,6 +440,9 @@ module main();
     reg isJns_e;
     reg isLd_e;
     reg isSt_e;
+    reg isAdd_e;
+    reg isMul_e;
+    reg isMov_e;
     reg isDefined_e;
     reg updatesRegs_e;
     reg misaligned_e;
@@ -472,11 +484,18 @@ module main();
                 if(isSub_d) begin
                     out <= used_regx - used_regy;
                 end
-                if((isMovl_d | isMovh_d | isJz_d | isJnz_d | isJs_d | isJns_d | isSt_d) === 1) begin
+                if(isAdd_d) begin
+                    out <= used_regx + used_regy;
+                end
+                if(isMul_d) begin
+                    out <= used_regx * used_regy;
+                end
+                if((isMovl_d | isMovh_d | isJz_d | isJnz_d | isJs_d | isJns_d | isSt_d | isMov_d) === 1) begin
                     vt <= used_regx;
                     saddr_e <= used_regy;
                     out <=  isMovl_d ? {{8{i[7]}},i}:
                             isMovh_d ? (used_regx & 16'hff) | (i << 8) :
+                            isMov_d ? used_regy : 
                             isSt_d ? ((mis_st_cnt == 1) ? {ldata[15:8], used_regx[15:8]} : used_regx) :
                             0;
                 end
@@ -491,6 +510,9 @@ module main();
                 isJns_e <= isJns_d;
                 isLd_e <= isLd_d;
                 isSt_e <= isSt_d;
+                isAdd_e <= isAdd_d;
+                isMul_e <= isMul_d;
+                isMov_e <= isMov_d;
                 isDefined_e <= isDefined_d;
                 updatesRegs_e <= updatesRegs_d;
                 rt_e <= rt;
