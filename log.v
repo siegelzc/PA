@@ -30,15 +30,15 @@ module log();
 
 
     assign clk = main.clk;
-    assign isSub = main.isSub;
-    assign isMovl = main.isMovl;
-    assign isMovh = main.isMovh;
-    assign isJz = main.isJz;
-    assign isJnz = main.isJnz;
-    assign isJs = main.isJs;
-    assign isJns = main.isJns;
-    assign isLd = main.isLd;
-    assign isSt = main.isSt;
+    assign isSub = main.isSub_e;
+    assign isMovl = main.isMovl_e;
+    assign isMovh = main.isMovh_e;
+    assign isJz = main.isJz_e;
+    assign isJnz = main.isJnz_e;
+    assign isJs = main.isJs_e;
+    assign isJns = main.isJns_e;
+    assign isLd = main.isLd_e;
+    assign isSt = main.isSt_e;
     assign jump_taken = main.isJumping;
     assign retired = main.retired;
     assign pc = main.pc_e;
@@ -59,23 +59,23 @@ module log();
         end
         if(retired) begin
             if(isSub)
-                $fdisplay(logfile, "PC: %04h sub r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h r %h %04h",pc,reg_addr,reg_data);
             if(isMovl)
-                $fdisplay(logfile, "PC: %04h movl r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h r %h %04h",pc,reg_addr,reg_data);
             if(isMovh)
-                $fdisplay(logfile, "PC: %04h movh r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h r %h %04h",pc,reg_addr,reg_data);
             if(isLd)
-                $fdisplay(logfile, "PC: %04h ld r[%h] = %04h",pc,reg_addr,reg_data);
+                $fdisplay(logfile, "%04h r %h %04h",pc,reg_addr,reg_data);
             if(isSt)
-                $fdisplay(logfile, "PC: %04h st m[%04h] = %04h",pc,mem_addr,mem_data);
+                $fdisplay(logfile, "%04h m %04h %04h",pc,mem_addr,mem_data);
             if(isJz)
-                $fdisplay(logfile, "PC: %04h jz pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h pc = %04h",pc,jump_addr);
             if(isJnz)
-                $fdisplay(logfile, "PC: %04h jnz pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h pc = %04h",pc,jump_addr);
             if(isJs)
-                $fdisplay(logfile, "PC: %04h js pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h pc = %04h",pc,jump_addr);
             if(isJns)
-                $fdisplay(logfile, "PC: %04h jns pc = %04h",pc,jump_addr);
+                $fdisplay(logfile, "%04h pc = %04h",pc,jump_addr);
         end
     end
 
