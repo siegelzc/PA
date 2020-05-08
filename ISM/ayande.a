@@ -21,4 +21,3 @@ movh 133 r7
 st r7 r1
 movl 78 r0
 movl 89 r0
-invalid

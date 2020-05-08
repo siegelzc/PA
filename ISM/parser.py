@@ -90,6 +90,20 @@ class Instruction:
     def __init__(self, op, *args):
         self.op = op
 
+        if (op == Instruction.Type.SUB): self.str = 'sub'
+        elif (op == Instruction.Type.ADD): self.str = 'add'
+        elif (op == Instruction.Type.MUL): self.str = 'mul'
+        elif (op == Instruction.Type.MOVL): self.str = 'movl'
+        elif (op == Instruction.Type.MOVH): self.str = 'movh'
+        elif (op == Instruction.Type.MOV): self.str = 'mov'
+        elif (op == Instruction.Type.SWP): self.str = 'swp'
+        elif (op == Instruction.Type.JZ): self.str = 'jz'
+        elif (op == Instruction.Type.JNZ): self.str = 'jnz'
+        elif (op == Instruction.Type.JS): self.str = 'js'
+        elif (op == Instruction.Type.JNS): self.str = 'jns'
+        elif (op == Instruction.Type.LD): self.str = 'ld'
+        elif (op == Instruction.Type.ST): self.str = 'st'
+
         if (op == Instruction.Type.SUB or op == Instruction.Type.ADD or op == Instruction.Type.MUL):
             self.ra = args[0]
             self.rb = args[1]

@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 
 import sys
+import csv
 from parser import *
 
 mem = [None] * 65535
 regs = ['0000'] + [None] * 15
+memLog = []
+regsLog = []
 
 
 def sval(num):
@@ -31,6 +34,9 @@ for i in range(0, len(lines)):
 
 pc = 0
 while True:
+
+    regsLog.append(regs[:])
+    memLog.append(mem[:])
 
     ins = parse(mem[pc] + mem[pc + 1])
     value = None
@@ -60,12 +66,15 @@ while True:
         value = va
         regs[ins.ra] = regs[ins.rt]
     elif (typ == Instruction.Type.LD):
-        value = int(mem[va] + mem[va + 1], 16)
+        try:
+            value = int(mem[va] + mem[va + 1], 16)
+        except TypeError:  # TypeError occurs if either of the memory bytes are undefined
+            print("WARNING:{0} Loading an undefined value from memory".format(ins.str), file=sys.stderr)
     elif (typ == Instruction.Type.ST):
-        mem[va] = '{0:0{1}X}'.format(vt, 2)[0:2]
-        mem[va + 1] = '{0:0{1}X}'.format(vt, 2)[2:4]
+        mem[vt] = '{0:0{1}X}'.format(va, 2)[0:2]
+        mem[vt + 1] = '{0:0{1}X}'.format(va, 2)[2:4]
 
-    if (value != None):
+    if (value is not None):
         if (ins.rt == 0):
             print(chr(value), end='')
         else:
@@ -81,13 +90,11 @@ while True:
         pc = vt
     else:
         pc += 2
-    memLog.append(mem)
-    regsLog.append(regs)
 
-with open("ism_mem.csv","w") as f:
-    wr = csv.writer(f,delimiter="\n")
+with open("ism_mem.csv", "w") as f:
+    wr = csv.writer(f, delimiter="\n")
     wr.writerow(list(zip(*memLog)))
 
-with open("ism_regs.csv","w") as f:
-    wr = csv.writer(f,delimiter="\n")
+with open("ism_regs.csv", "w") as f:
+    wr = csv.writer(f, delimiter="\n")
     wr.writerow(list(zip(*regsLog)))

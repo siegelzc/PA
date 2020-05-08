@@ -83,8 +83,8 @@ while True:
     elif (typ == Instruction.Type.LD):
         value = int(mem[va] + mem[va + 1], 16)
     elif (typ == Instruction.Type.ST):
-        mem[va] = '{0:0{1}X}'.format(vt, 2)[0:2]
-        mem[va + 1] = '{0:0{1}X}'.format(vt, 2)[2:4]
+        mem[vt] = '{0:0{1}X}'.format(va, 2)[0:2]
+        mem[vt + 1] = '{0:0{1}X}'.format(va, 2)[2:4]
 
     if (value != None):
         if (ins.rt == 0):
@@ -102,5 +102,3 @@ while True:
         pc = vt
     else:
         pc += 2
-
-    # print(regs)
