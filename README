@@ -24,6 +24,9 @@ Architecture
     * writing to r0 interprets the the least significant
     8 bits as an ASCII code and prints that character
 
+    NOTE: r1 is special:
+        r1 is used as the shit register for jump locations, in order to support labels
+
     - all instructions are 16 bit wide
 
     encoding          instruction   description
