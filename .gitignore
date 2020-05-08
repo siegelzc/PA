@@ -9,4 +9,5 @@ cpu.log
 ISM/*.csv
 ISM/*.hex
 cpu/*.hex
+ISM/*.out
 

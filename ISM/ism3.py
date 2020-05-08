@@ -101,7 +101,7 @@ while True:
     
     
 
-    output += ( '{0:0{1}X}'.format(pc, 4) + " " + str(typ) + s + "\n")
+    output += ( '{0:0{1}X}'.format(pc, 4) + " " + str(typ) + " " + s + "\n")
 
 f.write(output)
 f.close()
