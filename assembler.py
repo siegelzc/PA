@@ -3,10 +3,6 @@
 
 import sys
 
-if __name__ != '__main__':
-    print("assembler.py should be run as the main program", file=sys.stderr)
-    sys.exit(2)
-
 if len(sys.argv) == 1 or '--help' in sys.argv:
     print("""Assembler:
     Usage: /assembler.py [FILE].[EXT]
@@ -130,7 +126,7 @@ def encodeline(line, linenum, list):
         sys.exit(1)
 
 
-for filename in sys.argv[1:]:
+def assemblefile(filename):
     name_length = filename.rfind('.')
     if (name_length == -1): name_length = len(filename)
     outname = '{0}.hex'.format(filename[0:name_length])
@@ -153,3 +149,8 @@ for filename in sys.argv[1:]:
             hexfile.write('{0}'.format(encoding))
             insnum += 1
         hexfile.write('ffff\n')  # End the file with an invalid instruction
+
+
+if __name__ == '__main__':
+    for filename in sys.argv[1:]:
+        assemblefile(filename)
