@@ -13,4 +13,5 @@ ISM/*.csv
 ISM/*.hex
 ISM/*.out
 ISM/*.log
+ISM/logs/
 

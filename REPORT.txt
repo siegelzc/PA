@@ -1,0 +1,15 @@
+Team members: Arnav Mohan, Ankit Yande, Zachary Siegel
+
+
+How much did each member contribute?
+    We each contributed equally more-or-less
+
+What did you do?
+    I wrote the assembler, the script to parse and decode the hex file for the instruction set model (ISM),
+    the code within the ISM to handle signed values,
+
+What did you learn?
+
+
+Tell me how to browse/run your code
+

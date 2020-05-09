@@ -2,6 +2,7 @@
 
 import sys
 import csv
+import os
 from parser import *
 
 mem = [None] * 65535
@@ -28,8 +29,10 @@ def model(filename):
 
     lines = text.split('\n')[1:]  # First line of the hex file is '@X'
 
-    log = open("./logs/ism.log", "w")
-    out = open("./logs/ism.out", "w")
+    filepath = os.path.realpath(__file__)
+    filedir = os.path.dirname(filepath)
+    log = open("{0}/logs/ism.log".format(filedir), "w")
+    out = open("{0}/logs/ism.out".format(filedir), "w")
 
     for i in range(0, len(lines)):
         if (len(lines[i]) == 4):
@@ -40,19 +43,20 @@ def model(filename):
     output = ""
     pcLog = []
     while True:
-
-
         ins = parse(mem[pc] + mem[pc + 1])
         value = None
 
         typ = ins.op
+        if (typ == Instruction.Type.UNDEF):
+            break
+
+        pcLog.append('{0:0{1}x}'.format(pc, 4))
+
         va = int(regs[ins.ra], 16) if ins.ra and regs[ins.ra] else None
         vb = int(regs[ins.rb], 16) if ins.rb and regs[ins.rb] else None
         vt = int(regs[ins.rt], 16) if ins.rt and regs[ins.rt] else None
 
-        if (typ == Instruction.Type.UNDEF):
-            break
-        elif (typ == Instruction.Type.SUB):
+        if (typ == Instruction.Type.SUB):
             value = sval(va) - sval(vb)
         elif (typ == Instruction.Type.ADD):
             value = sval(va) + sval(vb)
@@ -72,14 +76,14 @@ def model(filename):
             except TypeError:  # TypeError occurs if either of the memory bytes are undefined
                 print("WARNING:{0} Loading an undefined value from memory".format(ins.str), file=sys.stderr)
         elif (typ == Instruction.Type.ST):
-            mem[va] = '{0:0{1}X}'.format(vt, 2)[0:2]
-            mem[va + 1] = '{0:0{1}X}'.format(vt, 2)[2:4]
+            mem[va] = '{0:0{1}x}'.format(vt, 2)[0:2]
+            mem[va + 1] = '{0:0{1}x}'.format(vt, 2)[2:4]
 
         if (value is not None):
             if (ins.rt == 0):
                 print(chr(value), end='', file=out)
             else:
-                regs[ins.rt] = '{0:0{1}X}'.format(value, 4)[-4:]
+                regs[ins.rt] = '{0:0{1}x}'.format(value, 4)[-4:]
 
         if (typ == Instruction.Type.JZ and va == 0):
             pc = vt
@@ -94,31 +98,30 @@ def model(filename):
 
         s = ""
         if (typ == Instruction.Type.ST):
-            s = "m[" + '{0:0{1}X}'.format(vt, 4) + "] = " + '{0:0{1}X}'.format(va, 4)
+            s = "m[" + '{0:0{1}x}'.format(vt, 4) + "] = " + '{0:0{1}x}'.format(va, 4)
         elif (value is not None):
-            s = "r[" + '{0:0{1}X}'.format(ins.rt, 4) + "] = " + '{0:0{1}X}'.format(value, 4)
+            s = "r[" + '{0:0{1}x}'.format(ins.rt, 4) + "] = " + '{0:0{1}x}'.format(value, 4)
         else:
-            s = 'pc = {0:0{1}X}'.format(pc, 4)
+            s = 'pc = {0:0{1}x}'.format(pc, 4)
 
-        output += ('{0:0{1}X}'.format(pc, 4) + " " + str(typ) + " " + s + "\n")
+        output += ('{0:0{1}x}'.format(pc, 4) + " " + str(typ) + " " + s + "\n")
 
         regsLog.append(regs[:])
         memLog.append(mem[:])
-        pcLog.append('{0:0{1}x}'.format(pc-2, 4))
     
     log.write(output)
     log.close()
     out.close()
 
-    with open("./logs/ism_mem.csv", "w") as log:
+    with open("{0}/logs/ism_mem.csv".format(filedir), "w") as log:
         wr = csv.writer(log, delimiter="\n")
         wr.writerow(memLog)
 
-    with open("./logs/ism_regs.csv", "w") as log:
+    with open("{0}/logs/ism_regs.csv".format(filedir), "w") as log:
         wr = csv.writer(log, delimiter="\n")
         wr.writerow(regsLog)
 
-    with open("./logs/ism_pc.csv", "w") as log:
+    with open("{0}/logs/ism_pc.csv".format(filedir), "w") as log:
         wr = csv.writer(log, delimiter="\n")
         wr.writerow(pcLog)
 

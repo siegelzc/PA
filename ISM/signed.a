@@ -1,3 +1,0 @@
-movl 255 r1
-movl 66 r3
-add r3 r1 r0

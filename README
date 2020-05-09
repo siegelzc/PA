@@ -24,10 +24,9 @@ Architecture
     * writing to r0 interprets the the least significant
     8 bits as an ASCII code and prints that character
 
-    NOTE: The assembly language for jumps includes a shit register.
-
-    
-
+    NOTE: When a jump is used, a movl instruction is inserted before the
+        jump instruction, moving the address of the label into rt.
+        SUBNOTE: This limits the address of the label to a byte
     - all instructions are 16 bit wide
 
     encoding          instruction   description
