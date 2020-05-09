@@ -25,7 +25,7 @@ def sval(num):
 with open(sys.argv[1], 'r') as hexfile:
     text = hexfile.read()
 
-lines = text.split('\n')
+lines = text.split('\n')[1:]  # First line of the hex file is '@X'
 
 log = open("ism.log", "w")
 out = open("ism.out", "w")
@@ -37,10 +37,12 @@ for i in range(0, len(lines)):
 
 pc = 0
 output = ""
+pcLog = []
 while True:
 
     regsLog.append(regs[:])
     memLog.append(mem[:])
+    pcLog.append('{0:0{1}x}'.format(pc, 4))
 
     ins = parse(mem[pc] + mem[pc + 1])
     value = None
@@ -113,3 +115,7 @@ with open("ism_mem.csv", "w") as log:
 with open("ism_regs.csv", "w") as log:
     wr = csv.writer(log, delimiter="\n")
     wr.writerow(list(zip(*regsLog)))
+
+with open("ism_pc.csv", "w") as log:
+    wr = csv.writer(log, delimiter="\n")
+    wr.writerow(pcLog)

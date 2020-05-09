@@ -22,7 +22,7 @@ def sval(num):
 with open(sys.argv[1], 'r') as hexfile:
     text = hexfile.read()
 
-lines = text.split('\n')
+lines = text.split('\n')[1:]  # First line of the hex file is '@X'
 
 for i in range(0, len(lines)):
     if (len(lines[i]) == 4):
