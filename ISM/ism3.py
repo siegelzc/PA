@@ -41,9 +41,6 @@ def model(filename):
     pcLog = []
     while True:
 
-        regsLog.append(regs[:])
-        memLog.append(mem[:])
-        pcLog.append('{0:0{1}x}'.format(pc, 4))
 
         ins = parse(mem[pc] + mem[pc + 1])
         value = None
@@ -105,17 +102,21 @@ def model(filename):
 
         output += ('{0:0{1}X}'.format(pc, 4) + " " + str(typ) + " " + s + "\n")
 
+        regsLog.append(regs[:])
+        memLog.append(mem[:])
+        pcLog.append('{0:0{1}x}'.format(pc, 4))
+    
     log.write(output)
     log.close()
     out.close()
 
     with open("ism_mem.csv", "w") as log:
         wr = csv.writer(log, delimiter="\n")
-        wr.writerow(list(zip(*memLog)))
+        wr.writerow(memLog)
 
     with open("ism_regs.csv", "w") as log:
         wr = csv.writer(log, delimiter="\n")
-        wr.writerow(list(zip(*regsLog)))
+        wr.writerow(regsLog)
 
     with open("ism_pc.csv", "w") as log:
         wr = csv.writer(log, delimiter="\n")
