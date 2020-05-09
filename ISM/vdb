@@ -3,8 +3,8 @@
 
 import os
 import argparse
-import assembler
-from ism3 import model
+from assembler import *
+from ism import model
 from logReader import buildcsv
 
 parser = argparse.ArgumentParser(description="Debugging tool for Verilog/Assembly in CS429H")
@@ -20,11 +20,11 @@ aspath = os.path.realpath(asfile)
 asdir = os.path.dirname(aspath)
 cpupath = os.path.realpath(cpu)
 cpudir = os.path.dirname(cpupath)
-hexpath = assembler.getoutname(aspath)
+hexpath = getoutname(aspath)
 
 os.system('mkdir {0}/logs'.format(scriptdir))
 os.system('rm -r {0}/logs/*'.format(scriptdir))
-assembler.assemblefile(aspath)
+assemblefile(aspath)
 model(hexpath)
 os.system('cat {0} > {1}/mem.hex'.format(hexpath, cpudir))
 os.chdir(cpudir)
