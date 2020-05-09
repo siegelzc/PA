@@ -18,6 +18,9 @@ module log();
     wire isJns;
     wire isLd;
     wire isSt;
+    wire isAdd;
+    wire isMul;
+    wire isMov;
     wire jump_taken;
     wire retired;
     wire[15:0] pc;
@@ -39,6 +42,9 @@ module log();
     assign isJns = main.isJns_e;
     assign isLd = main.isLd_e;
     assign isSt = main.isSt_e;
+    assign isAdd = main.isAdd_e;
+    assign isMul = main.isMul_e;
+    assign isMov = main.isMov_e;
     assign jump_taken = main.isJumping;
     assign retired = main.retired;
     assign pc = main.pc_e;
@@ -76,6 +82,13 @@ module log();
                 $fdisplay(logfile, "%04h pc %04h",pc,jump_addr);
             if(isJns)
                 $fdisplay(logfile, "%04h pc %04h",pc,jump_addr);
+            if(isAdd)
+                $fdisplay(logfile, "%04h r %d %04h",pc,reg_addr,reg_data);
+            if(isMul)
+                $fdisplay(logfile, "%04h r %d %04h",pc,reg_addr,reg_data);
+            if(isMov)
+                $fdisplay(logfile, "%04h r %d %04h",pc,reg_addr,reg_data);
+
         end
     end
 
