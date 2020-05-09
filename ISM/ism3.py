@@ -2,7 +2,7 @@
 
 import sys
 import csv
-from .parser import *
+from parser import *
 
 mem = [None] * 65535
 regs = ['0000'] + [None] * 15
@@ -28,8 +28,8 @@ def model(filename):
 
     lines = text.split('\n')[1:]  # First line of the hex file is '@X'
 
-    log = open("ism.log", "w")
-    out = open("ism.out", "w")
+    log = open("./logs/ism.log", "w")
+    out = open("./logs/ism.out", "w")
 
     for i in range(0, len(lines)):
         if (len(lines[i]) == 4):
@@ -110,15 +110,15 @@ def model(filename):
     log.close()
     out.close()
 
-    with open("ism_mem.csv", "w") as log:
+    with open("./logs/ism_mem.csv", "w") as log:
         wr = csv.writer(log, delimiter="\n")
         wr.writerow(memLog)
 
-    with open("ism_regs.csv", "w") as log:
+    with open("./logs/ism_regs.csv", "w") as log:
         wr = csv.writer(log, delimiter="\n")
         wr.writerow(regsLog)
 
-    with open("ism_pc.csv", "w") as log:
+    with open("./logs/ism_pc.csv", "w") as log:
         wr = csv.writer(log, delimiter="\n")
         wr.writerow(pcLog)
 
