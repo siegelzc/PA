@@ -126,10 +126,14 @@ def encodeline(line, linenum, list):
         sys.exit(1)
 
 
-def assemblefile(filename):
+def getoutname(filename):
     name_length = filename.rfind('.')
     if (name_length == -1): name_length = len(filename)
-    outname = '{0}.hex'.format(filename[0:name_length])
+    return '{0}.hex'.format(filename[0:name_length])
+
+
+def assemblefile(filename):
+    outname = getoutname(filename)
     asm = []
     with open(filename, 'r') as sfile:
         # with open(outname, 'w') as hexfile:
