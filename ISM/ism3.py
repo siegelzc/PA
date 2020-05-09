@@ -104,7 +104,7 @@ def model(filename):
 
         regsLog.append(regs[:])
         memLog.append(mem[:])
-        pcLog.append('{0:0{1}x}'.format(pc, 4))
+        pcLog.append('{0:0{1}x}'.format(pc-2, 4))
     
     log.write(output)
     log.close()
