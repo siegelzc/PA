@@ -4,7 +4,7 @@ module counter(input isHalt, input clk);
 
     always @(posedge clk) begin
         if (isHalt) begin
-            $fdisplay(32'h8000_0002,"%d\n",count);
+            //$fdisplay(32'h8000_0002,"%d\n",count);
             $finish;
         end
         if (count == 500000) begin
